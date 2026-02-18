@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es">
+    <style>
+/* ===== SOLO COLORES PARA EL HOME ===== */
+
+body {
+  color: #f1f5f9;
+}
+
+/* Título principal */
+h1 {
+  color: #ffffff !important;
+  text-shadow: 0 0 12px rgba(0,255,136,.3);
+}
+
+/* Subtítulo */
+main > div.text-center p {
+  color: #cbd5e1 !important;
+}
+
+/* Título sección descripción */
+.card h2 {
+  color: #00ff88 !important;
+}
+
+/* Párrafos descripción */
+.card p {
+  color: #e2e8f0 !important;
+}
+
+/* Títulos de tarjetas */
+.card h3 {
+  color: #ffffff !important;
+}
+
+/* Texto dentro de tarjetas */
+.card .text-secondary {
+  color: #d1d5db !important;
+}
+
+/* Footer */
+.small {
+  color: #94a3b8 !important;
+}
+</style>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IoT | Medidor Eléctrico</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="./admin/styles.css" />
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top border-bottom border-white border-opacity-10">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="./index.html">
+        <span class="badge bg-primary-subtle text-primary fw-semibold">IoT</span>
+        <span class="fw-semibold">Medidor Eléctrico</span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto gap-2">
+          <li class="nav-item"><a class="nav-link active" href="./index.html"><i class="bi bi-house"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="./admin/index.html"><i class="bi bi-database-gear"></i> Admin</a></li>
+          <li class="nav-item"><a class="nav-link" href="./control/index.html"><i class="bi bi-toggles"></i> Control</a></li>
+          <li class="nav-item"><a class="nav-link" href="./monitor/index.html"><i class="bi bi-graph-up-arrow"></i> Monitoreo</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTENIDO -->
+  <main class="container my-5">
+
+    <!-- TITULO -->
+    <div class="text-center mb-4">
+      <h1 class="display-6 fw-bold mb-2">
+        Sistema IoT — Medidor de Consumo Eléctrico
+      </h1>
+      <p class="text-secondary">
+        Aplicación web para administrar, controlar y monitorear circuitos eléctricos simulados mediante API REST.
+      </p>
+    </div>
+
+    <!-- DESCRIPCIÓN -->
+    <div class="card glass border-0 mb-4">
+      <div class="card-body">
+        <h2 class="h5 mb-3">
+          <i class="bi bi-lightning-charge me-2"></i>
+          ¿De qué trata esta aplicación?
+        </h2>
+
+        <p class="text-secondary mb-2">
+          Este sistema simula una solución IoT compuesta por múltiples circuitos eléctricos.
+          Cada circuito puede activarse o desactivarse, cambiar su nivel de carga y generar
+          mediciones de voltaje, corriente, potencia y energía.
+        </p>
+
+        <p class="text-secondary mb-0">
+          La información se gestiona mediante una API REST en MockAPI y el sistema
+          está dividido en tres módulos principales: Administración, Control y Monitoreo.
+        </p>
+      </div>
+    </div>
+
+    <!-- MODULOS -->
+    <div class="row g-4">
+
+      <!-- ADMIN -->
+      <div class="col-12 col-md-6 col-xl-4">
+        <div class="card glass border-0 shadow-sm h-100">
+          <div class="card-body">
+            <h3 class="h5 mb-2">
+              <i class="bi bi-database-gear me-2"></i>
+              Administración
+            </h3>
+            <p class="text-secondary">
+              Permite crear, editar, listar y eliminar los circuitos IoT.
+              Aquí se definen los límites de potencia y el estado inicial de cada dispositivo.
+            </p>
+            <a href="./admin/index.html" class="btn btn-primary w-100">
+              Ir a Administración
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTROL -->
+      <div class="col-12 col-md-6 col-xl-4">
+        <div class="card glass border-0 shadow-sm h-100">
+          <div class="card-body">
+            <h3 class="h5 mb-2">
+              <i class="bi bi-toggles me-2"></i>
+              Control
+            </h3>
+            <p class="text-secondary">
+              Permite encender o apagar cada circuito mediante interruptores,
+              modificar su carga (baja, media o alta) y generar lecturas manuales.
+            </p>
+            <a href="./control/index.html" class="btn btn-outline-light w-100">
+              Ir a Control
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MONITOREO -->
+      <div class="col-12 col-md-6 col-xl-4">
+        <div class="card glass border-0 shadow-sm h-100">
+          <div class="card-body">
+            <h3 class="h5 mb-2">
+              <i class="bi bi-graph-up-arrow me-2"></i>
+              Monitoreo
+            </h3>
+            <p class="text-secondary">
+              Visualiza el comportamiento de los circuitos en tiempo real mediante gráficas
+              y una tabla con los últimos estados registrados, actualizados cada 2 segundos.
+            </p>
+            <a href="./monitor/index.html" class="btn btn-outline-light w-100">
+              Ir a Monitoreo
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FOOTER INFO -->
+    <div class="text-center text-secondary small mt-4">
+      Sistema desarrollado con Bootstrap 5 y MockAPI como backend simulado.
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

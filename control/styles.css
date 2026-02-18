@@ -1,0 +1,174 @@
+:root{
+  --bg0:#0a1220;
+  --bg1:#0b1630;
+  --panel: rgba(255,255,255,.06);
+  --panel2: rgba(255,255,255,.08);
+  --border: rgba(255,255,255,.12);
+  --text:#eaf2ff;
+  --muted: rgba(234,242,255,.65);
+
+  --energy:#2ee59d;   /* verde eléctrico */
+  --cyan:#4cc9ff;     /* cian */
+  --warn:#ffb020;     /* amarillo */
+  --danger:#ff4d6d;   /* rojo rosa */
+  --shadow: 0 18px 55px rgba(0,0,0,.35);
+}
+
+body{
+  min-height:100vh;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 600px at 12% 10%, rgba(46,229,157,.22), transparent 55%),
+    radial-gradient(1200px 600px at 90% 18%, rgba(76,201,255,.18), transparent 55%),
+    radial-gradient(900px 500px at 70% 80%, rgba(255,176,32,.12), transparent 60%),
+    linear-gradient(180deg, var(--bg0), var(--bg1));
+}
+
+.navbar{
+  background: rgba(10,18,32,.55) !important;
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+
+.navbar .nav-link{
+  color: var(--muted) !important;
+  transition: .15s ease;
+}
+.navbar .nav-link:hover{ color: var(--text) !important; }
+.navbar .nav-link.active{
+  color: var(--energy) !important;
+  font-weight: 700;
+  text-shadow: 0 0 18px rgba(46,229,157,.35);
+}
+
+.glass{
+  background: linear-gradient(180deg, var(--panel2), var(--panel));
+  border: 1px solid var(--border) !important;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+h1,h2,h3,h4,h5{ color: var(--text); }
+.text-secondary{ color: var(--muted) !important; }
+
+code{
+  color: var(--cyan);
+  background: rgba(76,201,255,.10);
+  border: 1px solid rgba(76,201,255,.18);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.table{ --bs-table-bg: transparent; }
+.table thead th{
+  color: rgba(234,242,255,.82);
+  font-weight: 800;
+  border-bottom-color: rgba(255,255,255,.14);
+}
+.table tbody td{
+  color: rgba(234,242,255,.92);
+  border-top-color: rgba(255,255,255,.10);
+}
+.table-hover tbody tr:hover{
+  background: rgba(46,229,157,.06);
+}
+
+.searchbox .input-group-text,
+.searchbox .form-control{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.12);
+  color: var(--text);
+}
+.searchbox .form-control::placeholder{ color: rgba(234,242,255,.45); }
+
+.form-control, .form-select{
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  color: var(--text);
+  border-radius: 14px;
+}
+.form-control:focus, .form-select:focus{
+  border-color: rgba(46,229,157,.55);
+  box-shadow: 0 0 0 .2rem rgba(46,229,157,.18);
+}
+
+.btn-primary{
+  background: linear-gradient(135deg, var(--energy), #18b87d);
+  border: none;
+  color: #04110c;
+  font-weight: 800;
+  box-shadow: 0 16px 30px rgba(46,229,157,.18);
+}
+.btn-primary:hover{ filter: brightness(1.03); }
+
+.btn-outline-light{
+  border-color: rgba(255,255,255,.18) !important;
+  color: var(--text) !important;
+  background: rgba(255,255,255,.04) !important;
+}
+.btn-outline-light:hover{ background: rgba(255,255,255,.08) !important; }
+
+.badge.text-bg-success{
+  background: rgba(46,229,157,.14) !important;
+  color: var(--energy) !important;
+  border: 1px solid rgba(46,229,157,.22);
+}
+.badge.text-bg-danger{
+  background: rgba(255,77,109,.14) !important;
+  color: var(--danger) !important;
+  border: 1px solid rgba(255,77,109,.22);
+}
+.badge.text-bg-secondary{
+  background: rgba(255,255,255,.10) !important;
+  color: rgba(234,242,255,.85) !important;
+  border: 1px solid rgba(255,255,255,.14);
+}
+
+.alert{
+  background: rgba(76,201,255,.10);
+  border: 1px solid rgba(76,201,255,.18);
+  color: rgba(234,242,255,.90);
+}
+
+.modal-content{
+  background: rgba(10,18,32,.92);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 18px;
+  box-shadow: 0 20px 70px rgba(0,0,0,.45);
+}
+
+
+/* ===== FIX CONTRASTE VALORES (CONTROL) ===== */
+
+/* Texto general del contenido de las tarjetas */
+.card, .card-body {
+  color: #eaf2ff !important;
+}
+
+/* Labels (Límite, Voltaje, etc.) un poquito más suaves */
+.card .text-secondary,
+.card small,
+.card .label,
+.card .fw-normal {
+  color: rgba(234,242,255,.75) !important;
+}
+
+/* VALORES: lo importante (números) bien claros */
+.card strong,
+.card b,
+.card .value,
+.card .fw-semibold,
+.card .fw-bold {
+  color: #ffffff !important;
+}
+
+/* Si tus valores están en <span> normales, esto ayuda */
+.card span {
+  color: rgba(255,255,255,.92);
+}
+
+/* Asegura que la tabla interna o grid no se “apague” */
+.card .row, .card .col, .card .col-6, .card .col-12 {
+  color: inherit;
+}

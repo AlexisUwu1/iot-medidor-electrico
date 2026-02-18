@@ -1,0 +1,17 @@
+/* ===== ADMIN STYLE ===== */
+
+.table {
+  color: #f8fafc;
+}
+
+.table thead {
+  background: rgba(0, 123, 255, 0.15);
+}
+
+.badge-active {
+  background-color: #22c55e;
+}
+
+.badge-inactive {
+  background-color: #ef4444;
+}

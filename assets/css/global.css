@@ -1,0 +1,39 @@
+/* ===== GLOBAL THEME ===== */
+
+body {
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  min-height: 100vh;
+  color: #f1f5f9;
+}
+
+.glass {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.card {
+  border-radius: 16px;
+}
+
+h1, h2, h3, h4, h5 {
+  color: #ffffff;
+}
+
+.text-secondary {
+  color: #cbd5e1 !important;
+}
+
+.navbar {
+  background: #0b1620 !important;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  border: none;
+}
+
+.btn-primary:hover {
+  opacity: 0.85;
+}

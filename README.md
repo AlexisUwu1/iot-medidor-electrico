@@ -82,4 +82,3 @@ Permite:
 
 ---
 
-## 🔗 Endpoint API

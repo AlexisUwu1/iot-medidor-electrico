@@ -37,3 +37,9 @@ h1, h2, h3, h4, h5 {
 .btn-primary:hover {
   opacity: 0.85;
 }
+
+footer {
+  color: #cbd5e1;
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(10px);
+}

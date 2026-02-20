@@ -1,17 +1,150 @@
-/* ===== ADMIN STYLE ===== */
+/* ===== ADMIN STYLE (Medidor Eléctrico) ===== */
 
-.table {
-  color: #f8fafc;
+.table{
+  --bs-table-bg: transparent;
+  --bs-table-color: rgba(232,240,255,.92);
+  margin: 0;
 }
 
-.table thead {
-  background: rgba(0, 123, 255, 0.15);
+.table thead th{
+  color: rgba(232,240,255,.82);
+  font-weight: 700;
+  letter-spacing: .2px;
+  border-bottom: 1px solid rgba(255,255,255,.14);
+  background: rgba(56,189,248,.10); /* azul eléctrico suave */
 }
 
-.badge-active {
-  background-color: #22c55e;
+.table tbody td{
+  color: rgba(232,240,255,.88);
+  border-top: 1px solid rgba(255,255,255,.10);
 }
 
-.badge-inactive {
-  background-color: #ef4444;
+.table tbody tr:hover{
+  background: rgba(34,197,94,.06); /* verde energía suave */
+}
+
+/* Campos "importantes" (valores numéricos) */
+.table .num{
+  color: rgba(255,255,255,.98);
+  font-weight: 700;
+}
+
+/* Botones de acción mejor visibles */
+.btn-outline-light{
+  border-color: rgba(232,240,255,.22);
+  color: rgba(232,240,255,.92);
+}
+.btn-outline-light:hover{
+  background: rgba(232,240,255,.10);
+  border-color: rgba(232,240,255,.35);
+}
+
+.btn-outline-danger{
+  border-color: rgba(239,68,68,.45);
+  color: rgba(239,68,68,.95);
+}
+.btn-outline-danger:hover{
+  background: rgba(239,68,68,.12);
+  border-color: rgba(239,68,68,.70);
+}
+
+/* Badges estado */
+.badge-active,
+.badge-inactive{
+  padding: .35rem .55rem;
+  border-radius: 999px;
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+
+.badge-active{
+  background: rgba(34,197,94,.18);
+  color: #22c55e;
+  border: 1px solid rgba(34,197,94,.35);
+}
+
+.badge-inactive{
+  background: rgba(239,68,68,.16);
+  color: #ef4444;
+  border: 1px solid rgba(239,68,68,.35);
+}
+
+/* Inputs del buscador / selects (si los usas en Admin) */
+.form-control, .form-select, .input-group-text{
+  background: rgba(255,255,255,.06) !important;
+  border-color: rgba(255,255,255,.14) !important;
+  color: rgba(232,240,255,.92) !important;
+}
+
+.form-control::placeholder{
+  color: rgba(232,240,255,.45) !important;
+}
+
+
+
+/* ===== FIX MODAL (Admin) ===== */
+.modal-content{
+  background: rgba(12, 18, 30, .92) !important;
+  color: rgba(232,240,255,.92) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  backdrop-filter: blur(14px);
+}
+
+.modal-header, .modal-footer{
+  border-color: rgba(255,255,255,.12) !important;
+}
+
+.modal-title{
+  color: #fff !important;
+  font-weight: 800;
+}
+
+/* labels */
+.modal label, .modal .form-label{
+  color: rgba(232,240,255,.75) !important;
+}
+
+/* inputs/selects */
+.modal .form-control,
+.modal .form-select,
+.modal .input-group-text{
+  background: rgba(255,255,255,.06) !important;
+  border-color: rgba(255,255,255,.14) !important;
+  color: rgba(232,240,255,.92) !important;
+}
+
+.modal .form-control::placeholder{
+  color: rgba(232,240,255,.45) !important;
+}
+
+/* switch */
+.modal .form-check-label{
+  color: rgba(232,240,255,.75) !important;
+}
+
+/* help text */
+.modal .form-text{
+  color: rgba(232,240,255,.55) !important;
+}
+
+/* ===== FIX DROPDOWN SELECT (Admin Modal) ===== */
+
+/* el select */
+.modal .form-select{
+  background-color: rgba(15, 23, 42, 0.92) !important;
+  color: rgba(232,240,255,.95) !important;
+  border-color: rgba(255,255,255,.18) !important;
+}
+
+/* opciones del dropdown */
+.modal .form-select option{
+  background-color: #0b1220 !important; /* oscuro real */
+  color: #e8f0ff !important;            /* texto claro */
+}
+
+/* cuando seleccionas/hover (algunos navegadores lo respetan) */
+.modal .form-select option:checked,
+.modal .form-select option:hover{
+  background-color: rgba(34,197,94,.20) !important;
+  color: #ffffff !important;
 }

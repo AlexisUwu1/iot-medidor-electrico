@@ -116,9 +116,9 @@ function cardHtml(item) {
   const energia = safeNumber(item.energia, 0);
   const estado = (item.estado || "normal").toLowerCase();
 
-  let estadoBadge = `<span class="badge text-bg-success">NORMAL</span>`;
-  if (estado === "alerta") estadoBadge = `<span class="badge text-bg-danger">ALERTA</span>`;
-  if (estado === "falla_sensor") estadoBadge = `<span class="badge text-bg-danger">FALLA</span>`;
+  let estadoBadge = `<span class="badge badge-normal">NORMAL</span>`;
+  if (estado === "alerta") estadoBadge = `<span class="badge badge-alerta">ALERTA</span>`;
+  if (estado === "falla_sensor") estadoBadge = `<span class="badge badge-alerta">FALLA</span>`;
 
   return `
     <div class="col-12 col-md-6 col-xl-4">
@@ -128,9 +128,10 @@ function cardHtml(item) {
             <div>
               <div class="text-secondary small">ID: ${id}</div>
               <h5 class="mb-1">${name}</h5>
-              <div class="d-flex gap-2 align-items-center">
+
+              <div class="d-flex gap-2 align-items-center flex-wrap">
                 ${estadoBadge}
-                <span class="badge text-bg-secondary">${load}</span>
+                <span class="badge badge-load">${load}</span>
               </div>
             </div>
 
@@ -143,32 +144,34 @@ function cardHtml(item) {
 
           <hr class="border-white border-opacity-10">
 
-          <div class="row g-2">
+          <div class="row g-3">
             <div class="col-6">
-              <div class="small text-secondary">Límite (W)</div>
-              <div class="fw-semibold">${limit}</div>
-            </div>
-            <div class="col-6">
-              <div class="small text-secondary">Voltaje (V)</div>
-              <div class="fw-semibold">${voltaje}</div>
+              <div class="metric-label">Límite (W)</div>
+              <div class="metric-value">${limit}</div>
             </div>
 
             <div class="col-6">
-              <div class="small text-secondary">Corriente (A)</div>
-              <div class="fw-semibold">${corriente}</div>
+              <div class="metric-label">Voltaje (V)</div>
+              <div class="metric-value">${voltaje}</div>
             </div>
+
             <div class="col-6">
-              <div class="small text-secondary">Potencia (W)</div>
-              <div class="fw-semibold">${potencia}</div>
+              <div class="metric-label">Corriente (A)</div>
+              <div class="metric-value">${corriente}</div>
+            </div>
+
+            <div class="col-6">
+              <div class="metric-label">Potencia (W)</div>
+              <div class="metric-value">${potencia}</div>
             </div>
 
             <div class="col-12">
-              <div class="small text-secondary">Energía (Wh)</div>
-              <div class="fw-semibold">${energia}</div>
+              <div class="metric-label">Energía (Wh)</div>
+              <div class="metric-value small">${energia}</div>
             </div>
           </div>
 
-          <div class="mt-3 d-flex gap-2 flex-wrap">
+          <div class="mt-3 d-flex gap-2 flex-wrap align-items-center">
             <select class="form-select form-select-sm w-auto"
               data-action="changeLoad" data-id="${id}">
               <option value="baja" ${load === "baja" ? "selected" : ""}>baja</option>
@@ -182,7 +185,7 @@ function cardHtml(item) {
             </button>
           </div>
 
-          <div class="small text-secondary mt-3">
+          <div class="update-text mt-3">
             Update: ${item.update ? new Date(item.update).toLocaleString() : "—"}
           </div>
         </div>

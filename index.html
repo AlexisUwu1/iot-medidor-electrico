@@ -1,65 +1,27 @@
 <!doctype html>
 <html lang="es">
-    <style>
-/* ===== SOLO COLORES PARA EL HOME ===== */
-
-body {
-  color: #f1f5f9;
-}
-
-/* Título principal */
-h1 {
-  color: #ffffff !important;
-  text-shadow: 0 0 12px rgba(0,255,136,.3);
-}
-
-/* Subtítulo */
-main > div.text-center p {
-  color: #cbd5e1 !important;
-}
-
-/* Título sección descripción */
-.card h2 {
-  color: #00ff88 !important;
-}
-
-/* Párrafos descripción */
-.card p {
-  color: #e2e8f0 !important;
-}
-
-/* Títulos de tarjetas */
-.card h3 {
-  color: #ffffff !important;
-}
-
-/* Texto dentro de tarjetas */
-.card .text-secondary {
-  color: #d1d5db !important;
-}
-
-/* Footer */
-.small {
-  color: #94a3b8 !important;
-}
-</style>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>IoT | Medidor Eléctrico</title>
-<link rel="icon" type="image/png" href="../assets/img/favicon.png">
+
+  <link rel="icon" type="image/png" href="./assets/img/favicon.png" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="./admin/styles.css" />
+
+  <!-- ✅ TU CSS GLOBAL -->
+  <link rel="stylesheet" href="./assets/css/global.css" />
 </head>
 
-<body>
+<body class="app-body">
 
   <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top border-bottom border-white border-opacity-10">
+  <nav class="navbar navbar-expand-lg navbar-dark app-nav sticky-top">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center gap-2" href="./index.html">
-        <span class="badge bg-primary-subtle text-primary fw-semibold">IoT</span>
+        <span class="brand-pill">
+          <i class="bi bi-cpu-fill me-1"></i> IoT
+        </span>
         <span class="fw-semibold">Medidor Eléctrico</span>
       </a>
 
@@ -68,122 +30,182 @@ main > div.text-center p {
       </button>
 
       <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav ms-auto gap-2">
-          <li class="nav-item"><a class="nav-link active" href="./index.html"><i class="bi bi-house"></i> Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="./admin/index.html"><i class="bi bi-database-gear"></i> Admin</a></li>
-          <li class="nav-item"><a class="nav-link" href="./control/index.html"><i class="bi bi-toggles"></i> Control</a></li>
-          <li class="nav-item"><a class="nav-link" href="./monitor/index.html"><i class="bi bi-graph-up-arrow"></i> Monitoreo</a></li>
+        <ul class="navbar-nav ms-auto gap-lg-2 mt-3 mt-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" href="./index.html">
+              <i class="bi bi-house-door me-1"></i> Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./admin/index.html">
+              <i class="bi bi-database-gear me-1"></i> Admin
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./control/index.html">
+              <i class="bi bi-toggles me-1"></i> Control
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./monitor/index.html">
+              <i class="bi bi-graph-up-arrow me-1"></i> Monitoreo
+            </a>
+          </li>
+          <li class="nav-item ms-lg-2">
+            <a class="btn btn-sm btn-primary-soft" href="./admin/index.html">
+              <i class="bi bi-lightning-charge me-1"></i> Empezar
+            </a>
+          </li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- CONTENIDO -->
-  <main class="container my-5">
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-12 col-lg-7">
+          <div class="badge hero-badge mb-3">
+            <i class="bi bi-wifi me-2"></i> API REST + MockAPI · Bootstrap 5
+          </div>
 
-    <!-- TITULO -->
-    <div class="text-center mb-4">
-      <h1 class="display-6 fw-bold mb-2">
-        Sistema IoT — Medidor de Consumo Eléctrico
-      </h1>
-      <p class="text-secondary">
-        Aplicación web para administrar, controlar y monitorear circuitos eléctricos simulados mediante API REST.
-      </p>
-    </div>
+          <h1 class="display-5 fw-bold hero-title mb-3">
+            Sistema IoT — Medidor de Consumo Eléctrico
+          </h1>
 
-    <!-- DESCRIPCIÓN -->
-    <div class="card glass border-0 mb-4">
-      <div class="card-body">
-        <h2 class="h5 mb-3">
-          <i class="bi bi-lightning-charge me-2"></i>
-          ¿De qué trata esta aplicación?
-        </h2>
+          <p class="lead hero-sub mb-4">
+            Administra, controla y monitorea circuitos eléctricos simulados con lecturas de
+            voltaje, corriente, potencia y energía.
+          </p>
 
-        <p class="text-secondary mb-2">
-          Este sistema simula una solución IoT compuesta por múltiples circuitos eléctricos.
-          Cada circuito puede activarse o desactivarse, cambiar su nivel de carga y generar
-          mediciones de voltaje, corriente, potencia y energía.
-        </p>
-
-        <p class="text-secondary mb-0">
-          La información se gestiona mediante una API REST en MockAPI y el sistema
-          está dividido en tres módulos principales: Administración, Control y Monitoreo.
-        </p>
-      </div>
-    </div>
-
-    <!-- MODULOS -->
-    <div class="row g-4">
-
-      <!-- ADMIN -->
-      <div class="col-12 col-md-6 col-xl-4">
-        <div class="card glass border-0 shadow-sm h-100">
-          <div class="card-body">
-            <h3 class="h5 mb-2">
-              <i class="bi bi-database-gear me-2"></i>
-              Administración
-            </h3>
-            <p class="text-secondary">
-              Permite crear, editar, listar y eliminar los circuitos IoT.
-              Aquí se definen los límites de potencia y el estado inicial de cada dispositivo.
-            </p>
-            <a href="./admin/index.html" class="btn btn-primary w-100">
-              Ir a Administración
+          <div class="d-flex flex-wrap gap-2">
+            <a href="./admin/index.html" class="btn btn-primary btn-lg">
+              <i class="bi bi-database-gear me-2"></i> Ir a Administración
+            </a>
+            <a href="./monitor/index.html" class="btn btn-outline-light btn-lg">
+              <i class="bi bi-graph-up-arrow me-2"></i> Ver Monitoreo
             </a>
           </div>
+
+          <div class="hero-stats mt-4">
+            <div class="stat">
+              <div class="stat-icon"><i class="bi bi-shield-check"></i></div>
+              <div>
+                <div class="stat-title">Módulos</div>
+                <div class="stat-value">Admin · Control · Monitoreo</div>
+              </div>
+            </div>
+            <div class="stat">
+              <div class="stat-icon"><i class="bi bi-arrow-repeat"></i></div>
+              <div>
+                <div class="stat-title">Actualización</div>
+                <div class="stat-value">cada 2 segundos (monitoreo)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-5">
+          <div class="glass p-4 p-lg-4 hero-card">
+            <h2 class="h5 mb-3">
+              <i class="bi bi-lightning-charge me-2"></i> ¿De qué trata?
+            </h2>
+
+            <p class="text-secondary mb-3">
+              Este sistema simula una solución IoT compuesta por múltiples circuitos eléctricos.
+              Cada circuito puede activarse/desactivarse, cambiar su nivel de carga y generar mediciones.
+            </p>
+
+            <div class="mini-list">
+              <div class="mini-item"><i class="bi bi-check2-circle"></i> Voltaje / Corriente</div>
+              <div class="mini-item"><i class="bi bi-check2-circle"></i> Potencia / Energía</div>
+              <div class="mini-item"><i class="bi bi-check2-circle"></i> Control por interruptores</div>
+              <div class="mini-item"><i class="bi bi-check2-circle"></i> Gráficas + tabla en vivo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MODULOS -->
+  <main class="container my-5">
+
+    <div class="row g-4">
+      <!-- ADMIN -->
+      <div class="col-12 col-md-6 col-xl-4">
+        <div class="glass card-mod h-100">
+          <div class="card-mod-head">
+            <div class="mod-icon"><i class="bi bi-database-gear"></i></div>
+            <div>
+              <h3 class="h5 mb-1">Administración</h3>
+              <div class="text-secondary small">CRUD de circuitos IoT</div>
+            </div>
+          </div>
+
+          <p class="text-secondary mb-4">
+            Crea, edita, lista y elimina circuitos. Define límites de potencia y estado inicial.
+          </p>
+
+          <a href="./admin/index.html" class="btn btn-primary w-100">
+            Entrar a Administración <i class="bi bi-arrow-right ms-1"></i>
+          </a>
         </div>
       </div>
 
       <!-- CONTROL -->
       <div class="col-12 col-md-6 col-xl-4">
-        <div class="card glass border-0 shadow-sm h-100">
-          <div class="card-body">
-            <h3 class="h5 mb-2">
-              <i class="bi bi-toggles me-2"></i>
-              Control
-            </h3>
-            <p class="text-secondary">
-              Permite encender o apagar cada circuito mediante interruptores,
-              modificar su carga (baja, media o alta) y generar lecturas manuales.
-            </p>
-            <a href="./control/index.html" class="btn btn-outline-light w-100">
-              Ir a Control
-            </a>
+        <div class="glass card-mod h-100">
+          <div class="card-mod-head">
+            <div class="mod-icon"><i class="bi bi-toggles"></i></div>
+            <div>
+              <h3 class="h5 mb-1">Control</h3>
+              <div class="text-secondary small">Interruptores y cargas</div>
+            </div>
           </div>
+
+          <p class="text-secondary mb-4">
+            Enciende/apaga circuitos, cambia carga (baja/media/alta) y genera lecturas manuales.
+          </p>
+
+          <a href="./control/index.html" class="btn btn-outline-light w-100">
+            Entrar a Control <i class="bi bi-arrow-right ms-1"></i>
+          </a>
         </div>
       </div>
 
       <!-- MONITOREO -->
       <div class="col-12 col-md-6 col-xl-4">
-        <div class="card glass border-0 shadow-sm h-100">
-          <div class="card-body">
-            <h3 class="h5 mb-2">
-              <i class="bi bi-graph-up-arrow me-2"></i>
-              Monitoreo
-            </h3>
-            <p class="text-secondary">
-              Visualiza el comportamiento de los circuitos en tiempo real mediante gráficas
-              y una tabla con los últimos estados registrados, actualizados cada 2 segundos.
-            </p>
-            <a href="./monitor/index.html" class="btn btn-outline-light w-100">
-              Ir a Monitoreo
-            </a>
+        <div class="glass card-mod h-100">
+          <div class="card-mod-head">
+            <div class="mod-icon"><i class="bi bi-graph-up-arrow"></i></div>
+            <div>
+              <h3 class="h5 mb-1">Monitoreo</h3>
+              <div class="text-secondary small">Tiempo real</div>
+            </div>
           </div>
+
+          <p class="text-secondary mb-4">
+            Visualiza gráficas y tabla con estados recientes actualizados automáticamente.
+          </p>
+
+          <a href="./monitor/index.html" class="btn btn-outline-light w-100">
+            Entrar a Monitoreo <i class="bi bi-arrow-right ms-1"></i>
+          </a>
         </div>
       </div>
-
     </div>
 
-    <!-- FOOTER INFO -->
-    <div class="text-center text-secondary small mt-4">
+    <!-- FOOTER -->
+    <footer class="text-center text-secondary small mt-5 pb-4">
       Sistema desarrollado con Bootstrap 5 y MockAPI como backend simulado.
-    </div>
+      <br />
+      Proyecto desarrollado por <strong class="text-light">Ing. García Peña Carlos Alexis</strong>
+    </footer>
 
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<footer class="text-center mt-5 py-3 small text-secondary border-top border-white border-opacity-10">
-  Proyecto desarrollado por <strong>Ing. García Peña Carlos Alexis</strong>
-</footer>
 </body>
 </html>

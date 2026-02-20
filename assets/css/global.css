@@ -1,45 +1,91 @@
-/* ===== GLOBAL THEME ===== */
-
-body {
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  min-height: 100vh;
-  color: #f1f5f9;
+/* ====== GLOBAL THEME (Medidor Eléctrico) ====== */
+:root{
+  --bg0:#070b12;
+  --bg1:#0b1422;
+  --card: rgba(255,255,255,.06);
+  --card2: rgba(255,255,255,.08);
+  --border: rgba(255,255,255,.12);
+  --text:#e8f0ff;
+  --muted:rgba(232,240,255,.72);
+  --accent:#22c55e;   /* verde energía */
+  --accent2:#38bdf8;  /* azul eléctrico */
+  --warn:#ef4444;
 }
 
-.glass {
-  background: rgba(255,255,255,0.05);
+html,body{height:100%}
+
+body{
+  color: var(--text);
+  background:
+    radial-gradient(900px 500px at 12% 12%, rgba(34,197,94,.18), transparent 60%),
+    radial-gradient(900px 500px at 88% 18%, rgba(56,189,248,.14), transparent 60%),
+    radial-gradient(900px 600px at 50% 90%, rgba(34,197,94,.10), transparent 55%),
+    linear-gradient(180deg, var(--bg1), var(--bg0));
+  min-height:100vh;
+}
+
+a{color:inherit}
+a:hover{color:var(--accent2)}
+
+.navbar{
+  background: rgba(10,16,26,.72) !important;
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+}
+
+.navbar .nav-link{
+  color: rgba(232,240,255,.78) !important;
+}
+.navbar .nav-link.active{
+  color: var(--accent) !important;
+  font-weight: 700;
+}
+.navbar-brand .badge{
+  background: rgba(56,189,248,.18) !important;
+  color: var(--accent2) !important;
+  border: 1px solid rgba(56,189,248,.25);
+}
+
+.text-secondary{
+  color: var(--muted) !important;
+}
+
+/* Cards “glass” */
+.glass{
+  background: linear-gradient(180deg, var(--card2), var(--card));
+  border: 1px solid var(--border) !important;
+  backdrop-filter: blur(14px);
+  border-radius: 18px;
+  box-shadow: 0 18px 60px rgba(0,0,0,.35);
+}
+
+/* Headings */
+h1,h2,h3,h4,h5{color: var(--text)}
+.display-6{letter-spacing:.2px}
+
+/* Buttons */
+.btn-primary{
+  background: linear-gradient(90deg, var(--accent2), #2563eb);
+  border: 0;
+  box-shadow: 0 10px 30px rgba(37,99,235,.20);
+}
+.btn-primary:hover{filter: brightness(1.05)}
+.btn-outline-light{
+  border-color: rgba(232,240,255,.25);
+  color: rgba(232,240,255,.92);
+}
+.btn-outline-light:hover{
+  background: rgba(232,240,255,.10);
+  border-color: rgba(232,240,255,.35);
+}
+
+/* Footer */
+footer{
+  color: rgba(232,240,255,.65);
+  background: rgba(255,255,255,.03);
+  border-top: 1px solid rgba(255,255,255,.10);
   backdrop-filter: blur(12px);
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.08);
 }
 
-.card {
-  border-radius: 16px;
-}
-
-h1, h2, h3, h4, h5 {
-  color: #ffffff;
-}
-
-.text-secondary {
-  color: #cbd5e1 !important;
-}
-
-.navbar {
-  background: #0b1620 !important;
-}
-
-.btn-primary {
-  background: linear-gradient(90deg, #00c6ff, #0072ff);
-  border: none;
-}
-
-.btn-primary:hover {
-  opacity: 0.85;
-}
-
-footer {
-  color: #cbd5e1;
-  background: rgba(255,255,255,0.03);
-  backdrop-filter: blur(10px);
-}
+/* Nice selection */
+::selection{background: rgba(34,197,94,.35)}

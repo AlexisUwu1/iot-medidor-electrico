@@ -4,97 +4,64 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>IoT | Monitoreo de Consumo</title>
-<link rel="icon" type="image/png" href="../assets/img/favicon.png">
+
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
-  <!-- Chart.js (para gráficas) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-<link rel="stylesheet" href="../assets/css/global.css">
-<link rel="stylesheet" href="../assets/css/monitor.css"></head>
+  <link rel="stylesheet" href="../assets/css/global.css">
+  <link rel="stylesheet" href="../assets/css/monitor.css">
+</head>
 
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top border-bottom border-white border-opacity-10">
-  <div class="container">
-    <a class="navbar-brand d-flex align-items-center gap-2" href="../index.html">
-      <span class="badge bg-primary-subtle text-primary fw-semibold">IoT</span>
-      <span class="fw-semibold">Monitoreo</span>
-    </a>
+<body class="app-body">
+  <nav class="navbar navbar-expand-lg navbar-dark app-nav sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="../index.html">
+        <span class="brand-pill"><i class="bi bi-cpu-fill me-1"></i> IoT</span>
+        <span class="fw-semibold">Monitoreo</span>
+      </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <div class="collapse navbar-collapse" id="navMenu">
-      <ul class="navbar-nav ms-auto gap-2">
-        <li class="nav-item"><a class="nav-link" href="../index.html"><i class="bi bi-house"></i> Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="../admin/index.html"><i class="bi bi-database-gear"></i> Admin</a></li>
-        <li class="nav-item"><a class="nav-link" href="../control/index.html"><i class="bi bi-toggles"></i> Control</a></li>
-        <li class="nav-item"><a class="nav-link active" href="../monitor/index.html"><i class="bi bi-graph-up-arrow"></i> Monitoreo</a></li>
-      </ul>
-
-      <div class="ms-lg-3 d-flex gap-2 mt-2 mt-lg-0">
-        <button id="btnReload" class="btn btn-outline-light btn-sm">
-          <i class="bi bi-arrow-clockwise"></i> Recargar
-        </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto gap-lg-2 mt-3 mt-lg-0">
+          <li class="nav-item"><a class="nav-link" href="../index.html"><i class="bi bi-house-door me-1"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="../admin/index.html"><i class="bi bi-database-gear me-1"></i> Admin</a></li>
+          <li class="nav-item"><a class="nav-link" href="../control/index.html"><i class="bi bi-toggles me-1"></i> Control</a></li>
+          <li class="nav-item"><a class="nav-link active" href="../monitor/index.html"><i class="bi bi-graph-up-arrow me-1"></i> Monitoreo</a></li>
+          <li class="nav-item ms-lg-2">
+            <button id="btnReload" class="btn btn-sm btn-outline-light" type="button">
+              <i class="bi bi-arrow-clockwise me-1"></i> Recargar
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
   <main class="container my-4">
     <div class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center justify-content-between mb-3">
       <div>
         <h1 class="h3 mb-1">Monitoreo de Consumo Eléctrico</h1>
         <p class="text-secondary mb-0">
-          Refresco cada <b>2 segundos</b>. Gráficas y últimos 10 estados por circuito.
+          Refresco cada <b>2 segundos</b>. Cada tarjeta muestra su gráfica y sus <b>últimos 10 estados</b>.
         </p>
       </div>
-      <div class="small text-secondary">
+
+      <div class="small text-secondary text-lg-end">
         Endpoint: <code id="endpointLabel"></code><br>
-        <span>Actualización: <span id="lastTick">—</span></span>
+        Actualización: <span id="lastTick">—</span>
       </div>
     </div>
 
     <div id="statusBar" class="alert alert-info d-none" role="alert"></div>
 
-    <!-- Charts -->
-    <div id="chartsRow" class="row g-3 mb-4">
-      <!-- JS crea charts -->
-    </div>
-
-    <!-- Tables (últimos 10) -->
-    <div class="card glass border-0 shadow-sm">
-      <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between mb-2">
-          <h2 class="h5 mb-0">Últimos 10 estados por circuito</h2>
-          <span class="text-secondary small">Se guarda mientras la página está abierta</span>
-        </div>
-
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead>
-              <tr>
-                <th>Circuito</th>
-                <th>Hora</th>
-                <th>Voltaje (V)</th>
-                <th>Corriente (A)</th>
-                <th>Potencia (W)</th>
-                <th>Energía (Wh)</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody id="historyBody">
-              <!-- JS llena filas -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    <div id="chartsRow" class="row g-3"></div>
   </main>
 
-  <!-- Toast -->
   <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
       <div class="toast-header">
@@ -107,11 +74,11 @@
     </div>
   </div>
 
+  <footer class="text-center mt-5 py-3 small text-secondary border-top border-white border-opacity-10">
+    Proyecto desarrollado por <strong class="text-light">Ing. García Peña Carlos Alexis</strong>
+  </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="./app.js"></script>
-
-<footer class="text-center mt-5 py-3 small text-secondary border-top border-white border-opacity-10">
-  Proyecto desarrollado por <strong>Ing. García Peña Carlos Alexis</strong>
-</footer>
 </body>
 </html>

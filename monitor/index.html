@@ -33,7 +33,7 @@
           <li class="nav-item"><a class="nav-link" href="../control/index.html"><i class="bi bi-toggles me-1"></i> Control</a></li>
           <li class="nav-item"><a class="nav-link active" href="../monitor/index.html"><i class="bi bi-graph-up-arrow me-1"></i> Monitoreo</a></li>
           <li class="nav-item ms-lg-2">
-            <button id="btnReload" class="btn btn-sm btn-outline-light" type="button">
+            <button id="btnReload" class="btn btn-sm btn-outline-light">
               <i class="bi bi-arrow-clockwise me-1"></i> Recargar
             </button>
           </li>
@@ -59,9 +59,12 @@
 
     <div id="statusBar" class="alert alert-info d-none" role="alert"></div>
 
-    <div id="chartsRow" class="row g-3"></div>
+    <div id="chartsRow" class="row g-3">
+      <!-- JS crea tarjetas -->
+    </div>
   </main>
 
+  <!-- Toast -->
   <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
       <div class="toast-header">

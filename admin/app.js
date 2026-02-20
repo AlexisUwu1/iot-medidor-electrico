@@ -27,6 +27,9 @@ const activeCheck = document.getElementById("active");
 const loadSelect = document.getElementById("load");
 const updateInput = document.getElementById("update");
 
+// ✅ PF
+const pfInput = document.getElementById("pf");
+
 // Toast
 const toastEl = document.getElementById("appToast");
 const toast = new bootstrap.Toast(toastEl, { delay: 2500 });
@@ -53,6 +56,32 @@ function notify(title, message) {
   toastTime.textContent = "ahora";
   toast.show();
 }
+
+
+
+function formatUpdate(dateLike){
+  if (!dateLike) return "—";
+  const d = new Date(dateLike);
+  if (isNaN(d.getTime())) return "—";
+  // formato corto: 19/2/26 · 11:26 pm
+  return d.toLocaleString(undefined, {
+    year: "2-digit",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).replace(",", " ·");
+}
+
+function loadChipClass(load){
+  const v = normalizeLoad(load);
+  if (v === "baja") return "badge-load-baja";
+  if (v === "alta") return "badge-load-alta";
+  return "badge-load-media";
+}
+
+
+
 function escapeHtml(str = "") {
   return String(str)
     .replaceAll("&", "&amp;")
@@ -76,6 +105,13 @@ function normalizeLoad(value) {
   if (["baja", "media", "alta"].includes(v)) return v;
   return "media";
 }
+function safeNumber(n, fallback = 0) {
+  const x = Number(n);
+  return Number.isFinite(x) ? x : fallback;
+}
+function clamp(n, min, max) {
+  return Math.max(min, Math.min(max, n));
+}
 
 function getFilteredItems() {
   const q = (searchInput.value || "").trim().toLowerCase();
@@ -85,10 +121,10 @@ function getFilteredItems() {
     const okLoad = load ? normalizeLoad(item.load) === load : true;
     const okQ = q
       ? (
-          String(item.id).toLowerCase().includes(q) ||
-          String(item.name || "").toLowerCase().includes(q) ||
-          String(item.load || "").toLowerCase().includes(q)
-        )
+        String(item.id).toLowerCase().includes(q) ||
+        String(item.name || "").toLowerCase().includes(q) ||
+        String(item.load || "").toLowerCase().includes(q)
+      )
       : true;
     return okLoad && okQ;
   });
@@ -187,40 +223,69 @@ function openCreateModal() {
   idInput.value = "";
 
   nameInput.value = "";
-  limitInput.value = 800;
+  limitInput.value = 900;
   loadSelect.value = "media";
   activeCheck.checked = true;
-  updateInput.value = toLocalDatetimeValue(new Date());
 
+  // ✅ PF default
+  pfInput.value = "0.90";
+
+  updateInput.value = toLocalDatetimeValue(new Date());
   deviceModal.show();
 }
+
 function openEditModal(item) {
   modalTitle.textContent = `Editar circuito #${item.id}`;
   idInput.value = item.id;
 
   nameInput.value = item.name ?? "";
-  limitInput.value = item.limit ?? 800;
+  limitInput.value = item.limit ?? 900;
   loadSelect.value = normalizeLoad(item.load);
   activeCheck.checked = !!item.active;
+
+  pfInput.value = String(clamp(safeNumber(item.pf, 0.9), 0.7, 1.0).toFixed(2));
   updateInput.value = toLocalDatetimeValue(item.update ?? new Date());
 
   deviceModal.show();
 }
 
-function getFormPayload() {
-  // Solo admin (CRUD). Los campos de medición se usarán en control/monitoreo.
+function getFormPayload(existingItem = null) {
   const name = nameInput.value.trim();
   const limit = Number(limitInput.value);
   const active = !!activeCheck.checked;
   const load = normalizeLoad(loadSelect.value);
   const update = new Date(updateInput.value).toISOString();
 
-  return { name, limit, active, load, update };
+  const pf = clamp(safeNumber(pfInput.value, 0.9), 0.7, 1.0);
+
+  // ✅ Inicializa mediciones si no existen (para control/monitoreo)
+  const base = existingItem || {};
+  const voltaje = safeNumber(base.voltaje, 120);
+  const corriente = safeNumber(base.corriente, 0);
+  const potencia = safeNumber(base.potencia, 0);
+  const energia = safeNumber(base.energia, 0);
+  const estado = String(base.estado || "normal").toLowerCase();
+
+  return {
+    name,
+    limit,
+    active,
+    load,
+    pf,
+    voltaje,
+    corriente,
+    potencia,
+    energia,
+    estado,
+    update
+  };
 }
+
 function validateForm(payload) {
   if (!payload.name) return "El nombre del circuito es obligatorio.";
   if (!Number.isFinite(payload.limit) || payload.limit <= 0) return "El límite debe ser un número mayor a 0.";
   if (!["baja", "media", "alta"].includes(payload.load)) return "Selecciona una carga válida.";
+  if (!Number.isFinite(payload.pf) || payload.pf < 0.7 || payload.pf > 1.0) return "PF debe estar entre 0.70 y 1.00.";
   if (!payload.update) return "La fecha/hora es obligatoria.";
   return null;
 }
@@ -240,7 +305,10 @@ deviceForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (isSaving) return;
 
-  const payload = getFormPayload();
+  const id = idInput.value.trim();
+  const existing = id ? allItems.find(x => String(x.id) === String(id)) : null;
+
+  const payload = getFormPayload(existing);
   const error = validateForm(payload);
   if (error) {
     notify("Validación", error);
@@ -249,7 +317,6 @@ deviceForm.addEventListener("submit", async (e) => {
 
   try {
     isSaving = true;
-    const id = idInput.value.trim();
     showStatus("Guardando…", "info");
 
     if (!id) {

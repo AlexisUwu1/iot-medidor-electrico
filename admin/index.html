@@ -4,14 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>IoT | Admin Circuitos</title>
-<link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-<link rel="stylesheet" href="../assets/css/global.css">
-<link rel="stylesheet" href="../assets/css/admin.css"></head>
+  <link rel="stylesheet" href="../assets/css/global.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
 
 <body>
 
@@ -45,145 +47,156 @@
     </div>
   </div>
 </nav>
-  <!-- Main -->
-  <main class="container my-4">
-    <!-- Header -->
-    <div class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center justify-content-between mb-3">
-      <div>
-        <h1 class="h3 mb-1">Administración de Circuitos</h1>
-        <p class="text-secondary mb-0">
-          CRUD de dispositivos IoT para un <b>medidor de consumo eléctrico</b>.
-        </p>
-      </div>
 
-      <div class="d-flex gap-2 flex-wrap">
-        <div class="input-group input-group-sm searchbox">
-          <span class="input-group-text"><i class="bi bi-search"></i></span>
-          <input id="searchInput" type="search" class="form-control" placeholder="Buscar por nombre o carga...">
-          <button id="btnClearSearch" class="btn btn-outline-secondary" type="button">Limpiar</button>
-        </div>
-
-        <select id="filterLoad" class="form-select form-select-sm w-auto">
-          <option value="">Todas las cargas</option>
-          <option value="baja">Baja</option>
-          <option value="media">Media</option>
-          <option value="alta">Alta</option>
-        </select>
-      </div>
+<main class="container my-4">
+  <div class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center justify-content-between mb-3">
+    <div>
+      <h1 class="h3 mb-1">Administración de Circuitos</h1>
+      <p class="text-secondary mb-0">
+        CRUD de dispositivos IoT para un <b>medidor de consumo eléctrico</b>.
+      </p>
     </div>
 
-    <!-- Status -->
-    <div id="statusBar" class="alert alert-info d-none" role="alert"></div>
-
-    <!-- Table -->
-    <div class="card shadow-sm border-0 glass">
-      <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between mb-2">
-          <div class="text-secondary small">
-            Total: <span id="countBadge" class="fw-semibold">0</span>
-          </div>
-          <div class="text-secondary small">
-            Endpoint: <code class="small" id="endpointLabel"></code>
-          </div>
-        </div>
-
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead>
-              <tr>
-                <th style="width: 90px;">ID</th>
-                <th>Circuito</th>
-                <th>Límite (W)</th>
-                <th>Carga</th>
-                <th>Activo</th>
-                <th>Update</th>
-                <th class="text-end" style="width: 160px;">Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="tbody"></tbody>
-          </table>
-        </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <div class="input-group input-group-sm searchbox">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input id="searchInput" type="search" class="form-control" placeholder="Buscar por nombre o carga...">
+        <button id="btnClearSearch" class="btn btn-outline-secondary" type="button">Limpiar</button>
       </div>
+
+      <select id="filterLoad" class="form-select form-select-sm w-auto">
+        <option value="">Todas las cargas</option>
+        <option value="baja">Baja</option>
+        <option value="media">Media</option>
+        <option value="alta">Alta</option>
+      </select>
     </div>
+  </div>
 
-    <p class="text-secondary small mt-3 mb-0">
-      Tip: La <b>carga</b> se usa para simular corriente en control/monitoreo. El <b>límite</b> dispara alertas.
-    </p>
-  </main>
+  <div id="statusBar" class="alert alert-info d-none" role="alert"></div>
 
-  <!-- Modal Create/Edit -->
-  <div class="modal fade" id="deviceModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content border-0 shadow-lg">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalTitle">Nuevo circuito</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+  <div class="card shadow-sm border-0 glass">
+    <div class="card-body">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <div class="text-secondary small">
+          Total: <span id="countBadge" class="fw-semibold">0</span>
         </div>
+      <div class="text-secondary small endpoint-wrap">
+  <span>Endpoint:</span>
+  <code class="small" id="endpointLabel"></code>
+  <button id="btnCopyEndpoint" class="btn btn-copy btn-sm" type="button" title="Copiar endpoint">
+    <i class="bi bi-clipboard"></i>
+  </button>
+</div>
+      </div>
 
-        <form id="deviceForm" class="modal-body">
-          <input type="hidden" id="id" />
-
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label">Nombre del circuito</label>
-              <input id="name" class="form-control" placeholder="Ej. C1 Iluminación" required maxlength="60" />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Carga</label>
-              <select id="load" class="form-select" required>
-                <option value="baja">Baja</option>
-                <option value="media">Media</option>
-                <option value="alta">Alta</option>
-              </select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Límite (Watts)</label>
-              <input id="limit" type="number" class="form-control" placeholder="Ej. 800" required min="1" />
-            </div>
-
-            <div class="col-md-6 d-flex align-items-end">
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="active" />
-                <label class="form-check-label" for="active">Activo</label>
-              </div>
-            </div>
-
-            <div class="col-12">
-              <label class="form-label">Update (fecha/hora)</label>
-              <input id="update" type="datetime-local" class="form-control" required />
-              <div class="form-text">Se guarda en ISO string.</div>
-            </div>
-          </div>
-        </form>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button id="btnSave" type="submit" form="deviceForm" class="btn btn-primary">
-            <i class="bi bi-check2-circle"></i> Guardar
-          </button>
-        </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th style="width: 90px;">ID</th>
+              <th>Circuito</th>
+              <th>Límite (W)</th>
+              <th>Carga</th>
+              <th>Activo</th>
+              <th>Update</th>
+              <th class="text-end" style="width: 160px;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
       </div>
     </div>
   </div>
 
-  <!-- Toast -->
-  <div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="toast-header">
-        <i class="bi bi-bell me-2"></i>
-        <strong class="me-auto" id="toastTitle">Aviso</strong>
-        <small class="text-secondary" id="toastTime">ahora</small>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+  <p class="text-secondary small mt-3 mb-0">
+    Tip: La <b>carga</b> se usa para simular corriente en control/monitoreo. El <b>límite</b> dispara alertas.
+  </p>
+</main>
+
+<!-- Modal Create/Edit -->
+<div class="modal fade" id="deviceModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Nuevo circuito</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
-      <div class="toast-body" id="toastBody">Listo.</div>
+
+      <form id="deviceForm" class="modal-body">
+        <input type="hidden" id="id" />
+
+        <div class="row g-3">
+
+          <div class="col-md-6">
+            <label class="form-label">Nombre del circuito</label>
+            <input id="name" class="form-control" placeholder="Ej. C1 Iluminación" required maxlength="60" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Carga</label>
+            <select id="load" class="form-select" required>
+              <option value="baja">Baja</option>
+              <option value="media">Media</option>
+              <option value="alta">Alta</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Límite (Watts)</label>
+            <input id="limit" type="number" class="form-control" placeholder="Ej. 900" required min="1" />
+            <div class="form-text">Ej: 900W (iluminación), 1800W (contactos/cocina).</div>
+          </div>
+
+          <!-- ✅ PF -->
+          <div class="col-md-3">
+            <label class="form-label">Factor de Potencia (PF)</label>
+            <input id="pf" type="number" step="0.01" min="0.70" max="1.00" class="form-control" />
+            <div class="form-text">Rango típico: 0.80–1.00</div>
+          </div>
+
+          <div class="col-md-3 d-flex align-items-end">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" id="active" />
+              <label class="form-check-label" for="active">Activo</label>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Update (fecha/hora)</label>
+            <input id="update" type="datetime-local" class="form-control" required />
+            <div class="form-text">Se guarda en ISO string.</div>
+          </div>
+
+        </div>
+      </form>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button id="btnSave" type="submit" form="deviceForm" class="btn btn-primary">
+          <i class="bi bi-check2-circle"></i> Guardar
+        </button>
+      </div>
     </div>
   </div>
+</div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="./app.js"></script>
+<!-- Toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <i class="bi bi-bell me-2"></i>
+      <strong class="me-auto" id="toastTitle">Aviso</strong>
+      <small class="text-secondary" id="toastTime">ahora</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+    </div>
+    <div class="toast-body" id="toastBody">Listo.</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="./app.js"></script>
+
 <footer class="text-center mt-5 py-3 small text-secondary border-top border-white border-opacity-10">
   Proyecto desarrollado por <strong>Ing. García Peña Carlos Alexis</strong>
 </footer>

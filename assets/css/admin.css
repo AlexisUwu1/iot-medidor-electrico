@@ -148,3 +148,210 @@
   background-color: rgba(34,197,94,.20) !important;
   color: #ffffff !important;
 }
+
+
+
+
+/* ================================
+   PRO UPGRADE (Admin)
+   ================================ */
+
+:root{
+  --glass-bg: rgba(12, 18, 30, .72);
+  --glass-br: rgba(255,255,255,.10);
+  --row-br: rgba(255,255,255,.10);
+  --muted: rgba(232,240,255,.62);
+  --text: rgba(232,240,255,.92);
+}
+
+/* Card "glass" más pro (si ya tienes .glass, esto solo refina) */
+.glass{
+  background: linear-gradient(180deg, rgba(56,189,248,.06), rgba(34,197,94,.03)) , var(--glass-bg);
+  border: 1px solid var(--glass-br) !important;
+  border-radius: 16px;
+  backdrop-filter: blur(14px);
+}
+
+/* ===== Table PRO ===== */
+.table{
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--text);
+  margin: 0;
+}
+
+.table thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  color: rgba(232,240,255,.82);
+  font-weight: 800;
+  letter-spacing: .25px;
+  border-bottom: 1px solid rgba(255,255,255,.14);
+  background: rgba(56,189,248,.10);
+  backdrop-filter: blur(10px);
+}
+
+/* Zebra sutil + mejor separación */
+.table tbody tr{
+  border-bottom: 1px solid var(--row-br);
+}
+.table tbody tr:nth-child(even){
+  background: rgba(255,255,255,.03);
+}
+.table tbody tr:hover{
+  background: rgba(34,197,94,.07);
+}
+
+/* Celdas: más aire */
+.table tbody td, .table thead th{
+  padding: .80rem .85rem;
+}
+.table tbody td{
+  border-top: 0;
+  color: rgba(232,240,255,.88);
+}
+
+/* Números a la derecha y con fuerza */
+.td-num{
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255,255,255,.96);
+  font-weight: 800;
+}
+
+/* Texto secundario consistente */
+.td-muted{
+  color: rgba(232,240,255,.62) !important;
+}
+
+/* ===== Badges PRO (chips consistentes) ===== */
+.badge-chip{
+  padding: .34rem .60rem;
+  border-radius: 999px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: rgba(232,240,255,.88);
+}
+.badge-load-baja{
+  background: rgba(56,189,248,.12);
+  border-color: rgba(56,189,248,.28);
+  color: rgba(186,230,253,.95);
+}
+.badge-load-media{
+  background: rgba(255,255,255,.07);
+  border-color: rgba(255,255,255,.16);
+  color: rgba(232,240,255,.90);
+}
+.badge-load-alta{
+  background: rgba(245,158,11,.14);
+  border-color: rgba(245,158,11,.30);
+  color: rgba(253,230,138,.95);
+}
+
+/* Estado */
+.badge-active{
+  background: rgba(34,197,94,.14);
+  color: #8bffb7;
+  border: 1px solid rgba(34,197,94,.30);
+}
+.badge-inactive{
+  background: rgba(239,68,68,.12);
+  color: #ffb4b4;
+  border: 1px solid rgba(239,68,68,.30);
+}
+
+/* ===== Acciones más limpias ===== */
+.actions{
+  display: inline-flex;
+  gap: .4rem;
+  justify-content: flex-end;
+}
+
+.btn-ic{
+  width: 36px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid rgba(232,240,255,.18);
+  color: rgba(232,240,255,.92);
+  background: rgba(255,255,255,.04);
+}
+.btn-ic:hover{
+  background: rgba(255,255,255,.09);
+  border-color: rgba(232,240,255,.30);
+}
+
+.btn-ic.danger{
+  border-color: rgba(239,68,68,.35);
+  color: rgba(255,140,140,.98);
+}
+.btn-ic.danger:hover{
+  background: rgba(239,68,68,.10);
+  border-color: rgba(239,68,68,.60);
+}
+
+/* ===== Endpoint PRO (menos “ruido” + copiar) ===== */
+.endpoint-wrap{
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.endpoint-wrap code{
+  color: rgba(232,240,255,.65);
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.10);
+  padding: .25rem .45rem;
+  border-radius: 10px;
+}
+.btn-copy{
+  border-radius: 10px;
+  border: 1px solid rgba(232,240,255,.18);
+  background: rgba(255,255,255,.04);
+  color: rgba(232,240,255,.90);
+}
+.btn-copy:hover{
+  background: rgba(255,255,255,.09);
+  border-color: rgba(232,240,255,.30);
+}
+
+/* Inputs del buscador / selects */
+.form-control, .form-select, .input-group-text{
+  background: rgba(255,255,255,.06) !important;
+  border-color: rgba(255,255,255,.14) !important;
+  color: rgba(232,240,255,.92) !important;
+}
+.form-control::placeholder{
+  color: rgba(232,240,255,.45) !important;
+}
+
+/* Modal refinado (tu modal ya está bien, esto solo redondea) */
+.modal-content{
+  border-radius: 18px !important;
+}
+
+/* Fuerza a que los controles nativos usen tema oscuro cuando se pueda */
+html { color-scheme: dark; }
+
+/* El select (cerrado) */
+#filterLoad.form-select{
+  background-color: rgba(15, 23, 42, 0.92) !important;
+  color: rgba(232,240,255,.95) !important;
+  border-color: rgba(255,255,255,.18) !important;
+}
+
+/* El menú (opciones) — ahora ya NO solo en modal */
+#filterLoad.form-select option{
+  background-color: #0b1220 !important;
+  color: #e8f0ff !important;
+}
+
+/* Cuando seleccionas/hover (algunos navegadores lo respetan) */
+#filterLoad.form-select option:checked,
+#filterLoad.form-select option:hover{
+  background-color: rgba(34,197,94,.22) !important;
+  color: #ffffff !important;
+}

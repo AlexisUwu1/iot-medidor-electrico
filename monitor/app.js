@@ -1,8 +1,8 @@
 const API_BASE = "https://698a177bc04d974bc6a1535b.mockapi.io/api/v1/Circuito";
 const TICK_MS = 2000;
 
-const HISTORY_MAX = 10;      // últimos 10 estados por dispositivo
-const CHART_MAX = 10;        // gráfica últimos 10 puntos
+const HISTORY_MAX = 10;  // últimos 10 estados por dispositivo
+const CHART_MAX = 10;    // últimos 10 puntos en gráfica
 
 const chartsRow = document.getElementById("chartsRow");
 const statusBar = document.getElementById("statusBar");
@@ -18,8 +18,8 @@ const toastBody = document.getElementById("toastBody");
 const toastTime = document.getElementById("toastTime");
 
 let circuits = [];
-let chartsById = new Map();     // id -> Chart
-let historyById = new Map();    // id -> array
+let chartsById = new Map();   // id -> Chart
+let historyById = new Map();  // id -> [{time,potencia,estado}]
 let timer = null;
 let isTicking = false;
 
@@ -40,45 +40,41 @@ function notify(title, message) {
 
 function normalizeLoad(value) {
   const v = String(value || "").toLowerCase().trim();
-  if (["baja", "media", "alta"].includes(v)) return v;
-  return "media";
+  return (["baja", "media", "alta"].includes(v)) ? v : "media";
 }
+
 function safeNumber(n, fallback = 0) {
   const x = Number(n);
   return Number.isFinite(x) ? x : fallback;
 }
+
+function nowISO() {
+  return new Date().toISOString();
+}
+
 function timeHHMMSS() {
   return new Date().toLocaleTimeString();
 }
 
-// ===== Simulación (sin guardar en API) =====
 function rand(min, max) {
   return +(Math.random() * (max - min) + min).toFixed(2);
 }
+
+// ✅ Esto evita el bug de active guardado como string ("true", "Sí", etc)
+function isActiveValue(v) {
+  if (v === true) return true;
+  if (v === false) return false;
+  const s = String(v).toLowerCase().trim();
+  return (s === "true" || s === "1" || s === "si" || s === "sí" || s === "on");
+}
+
 function getCurrentByLoad(load) {
   if (load === "baja") return rand(1, 3);
   if (load === "media") return rand(4, 7);
   return rand(8, 12);
 }
-function simulateReading(c) {
-  // Si está apagado, no cambia nada
-  if (!c.active) return c;
 
-  const load = normalizeLoad(c.load);
-  const voltaje = safeNumber(c.voltaje, 127);
-  const limit = safeNumber(c.limit, 0);
-
-  const corriente = getCurrentByLoad(load);
-  const potencia = +(voltaje * corriente).toFixed(2);
-  const estado = limit > 0 && potencia > limit ? "alerta" : "normal";
-
-  const energiaPrev = safeNumber(c.energia, 0);
-  const energia = +(energiaPrev + potencia * (TICK_MS / 1000 / 3600)).toFixed(4);
-
-  return { ...c, corriente, potencia, energia, estado };
-}
-
-// ===== API (solo lectura) =====
+// ===== API =====
 async function apiGetAll() {
   const res = await fetch(API_BASE);
   if (!res.ok) {
@@ -89,7 +85,20 @@ async function apiGetAll() {
   return Array.isArray(data) ? data : [];
 }
 
-// ===== UI: Chart Card + Mini Table =====
+async function apiUpdate(id, patch) {
+  const res = await fetch(`${API_BASE}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(patch),
+  });
+  if (!res.ok) {
+    const txt = await res.text().catch(() => "");
+    throw new Error(`PUT ${id} ${res.status} ${res.statusText} :: ${txt}`);
+  }
+  return res.json();
+}
+
+// ===== UI: Card =====
 function ensureChartCard(c) {
   const id = String(c.id);
   if (document.getElementById(`chart-card-${id}`)) return;
@@ -103,7 +112,7 @@ function ensureChartCard(c) {
         <div class="d-flex justify-content-between align-items-start gap-3">
           <div>
             <div class="text-secondary small">ID: ${id}</div>
-            <h5 class="card-title mb-1">${c.name || "—"}</h5>
+            <h5 class="card-title mb-1 device-name">${c.name || "—"}</h5>
             <div class="mini-badges">
               <span id="badge-state-${id}" class="badge text-bg-secondary">—</span>
               <span class="badge text-bg-secondary">${normalizeLoad(c.load)}</span>
@@ -112,7 +121,7 @@ function ensureChartCard(c) {
 
           <div class="small text-secondary text-end">
             <div>Límite: <span class="fw-semibold">${safeNumber(c.limit, 0)}</span> W</div>
-            <div>ON: <span class="fw-semibold" id="on-${id}">${c.active ? "Sí" : "No"}</span></div>
+            <div>ON: <span class="fw-semibold">${isActiveValue(c.active) ? "Sí" : "No"}</span></div>
           </div>
         </div>
 
@@ -120,7 +129,7 @@ function ensureChartCard(c) {
           <div class="chart-wrap">
             <canvas id="chart-${id}" height="170"></canvas>
             <div class="chart-foot">
-              Potencia actual: <span class="fw-semibold" id="pwr-${id}">—</span> W
+              Potencia: <span class="fw-semibold" id="pwr-${id}">—</span> W
               · Energía: <span class="fw-semibold" id="eng-${id}">—</span> Wh
             </div>
           </div>
@@ -156,87 +165,72 @@ function ensureChartCard(c) {
   const ctx = document.getElementById(`chart-${id}`).getContext("2d");
   const chart = new Chart(ctx, {
     type: "line",
-    data: {
-      labels: [],
-      datasets: [{
-        label: "Potencia (W)",
-        data: [],
-        tension: 0.35,
-        borderWidth: 2,
-        pointRadius: 2,
-        pointHoverRadius: 4,
-      }]
-    },
+    data: { labels: [], datasets: [{ data: [], tension: 0.35, borderWidth: 2, pointRadius: 2 }] },
     options: {
       responsive: true,
       animation: false,
       plugins: { legend: { display: false } },
-      scales: { x: { ticks: { maxTicksLimit: 5 } } }
+      scales: {
+        x: { ticks: { maxTicksLimit: 5 } },
+        y: { beginAtZero: true }
+      }
     }
   });
 
   chartsById.set(id, chart);
 }
 
-function updateChartAndBadges(c) {
-  const id = String(c.id);
+function updateChartAndBadges(view) {
+  const id = String(view.id);
   const chart = chartsById.get(id);
   if (!chart) return;
 
   const badge = document.getElementById(`badge-state-${id}`);
   const pwrEl = document.getElementById(`pwr-${id}`);
   const engEl = document.getElementById(`eng-${id}`);
-  const onEl = document.getElementById(`on-${id}`);
 
-  const potencia = safeNumber(c.potencia, 0);
-  const energia = safeNumber(c.energia, 0);
-  const estado = String(c.estado || "normal").toLowerCase();
+  const potencia = safeNumber(view.potencia, 0);
+  const energia = safeNumber(view.energia, 0);
+  const estado = String(view.estado || "normal").toLowerCase();
 
-  // badge estado
-  if (!c.active) {
+  // ✅ Estado por ACTIVE primero (si no está activo, no es OFFLINE, es APAGADO)
+  const active = isActiveValue(view.active);
+
+  if (!active) {
     badge.className = "badge text-bg-secondary";
-    badge.textContent = "OFFLINE";
+    badge.textContent = "APAGADO";
   } else {
     badge.className = "badge " + (estado === "alerta" ? "text-bg-danger" : "text-bg-success");
-    badge.textContent = estado === "alerta" ? "ALERTA" : "NORMAL";
+    badge.textContent = (estado === "alerta") ? "ALERTA" : "NORMAL";
   }
 
-  // texts
   pwrEl.textContent = potencia.toFixed(2);
   engEl.textContent = energia.toFixed(4);
-  if (onEl) onEl.textContent = c.active ? "Sí" : "No";
 
-  // ✅ si está OFF, NO agregamos puntos nuevos
-  if (!c.active) {
+  // ✅ Solo empuja punto si está activo (si no, la gráfica no se mueve)
+  if (active) {
+    chart.data.labels.push(timeHHMMSS());
+    chart.data.datasets[0].data.push(potencia);
+
+    while (chart.data.labels.length > CHART_MAX) {
+      chart.data.labels.shift();
+      chart.data.datasets[0].data.shift();
+    }
     chart.update();
-    return;
   }
-
-  // push chart point (solo ON)
-  const label = timeHHMMSS();
-  chart.data.labels.push(label);
-  chart.data.datasets[0].data.push(potencia);
-
-  while (chart.data.labels.length > CHART_MAX) {
-    chart.data.labels.shift();
-    chart.data.datasets[0].data.shift();
-  }
-
-  chart.update();
 }
 
-// ===== Mini history per circuit =====
-function pushHistory(c) {
-  const id = String(c.id);
+// ===== Mini history =====
+function pushHistory(view) {
+  const id = String(view.id);
   const list = historyById.get(id) || [];
 
-  const row = {
-    time: new Date().toLocaleTimeString(),
-    potencia: safeNumber(c.potencia, 0),
-    estado: String(c.estado || "normal").toLowerCase(),
-  };
+  list.unshift({
+    time: timeHHMMSS(),
+    potencia: safeNumber(view.potencia, 0),
+    estado: String(view.estado || "normal").toLowerCase(),
+  });
 
-  list.unshift(row);
   while (list.length > HISTORY_MAX) list.pop();
   historyById.set(id, list);
 }
@@ -252,7 +246,7 @@ function renderMiniTable(id) {
   }
 
   body.innerHTML = list.map(h => {
-    const badge = h.estado === "alerta"
+    const badge = (h.estado === "alerta")
       ? `<span class="badge badge-alert">ALERTA</span>`
       : `<span class="badge badge-ok">NORMAL</span>`;
 
@@ -266,30 +260,75 @@ function renderMiniTable(id) {
   }).join("");
 }
 
-// ===== Tick (cada 2s) =====
+// ===== Tick =====
+let putEvery = 0;
+
 async function tick() {
   if (isTicking) return;
   isTicking = true;
 
   try {
     circuits = await apiGetAll();
-
     for (const c of circuits) ensureChartCard(c);
 
-    // ✅ actualiza usando simulación (sin guardar en API)
+    // ✅ Mandamos PUT cada 4 segundos para evitar límite
+    putEvery++;
+    const allowPut = (putEvery % 2 === 0);
+
+    const updates = [];
+    const predicted = new Map();
+
     for (const c of circuits) {
       const id = String(c.id);
-      const view = simulateReading(c);
+      const active = isActiveValue(c.active);
+
+      if (!active) {
+        // solo muestra lo actual
+        updateChartAndBadges(c);
+        renderMiniTable(id);
+        continue;
+      }
+
+      const load = normalizeLoad(c.load);
+      const voltaje = safeNumber(c.voltaje, 120);
+      const limit = safeNumber(c.limit, 0);
+
+      const corriente = getCurrentByLoad(load);
+      const potencia = +(voltaje * corriente).toFixed(2);
+      const estado = (limit > 0 && potencia > limit) ? "alerta" : "normal";
+
+      const energiaPrev = safeNumber(c.energia, 0);
+      const energia = +(energiaPrev + potencia * (TICK_MS / 1000 / 3600)).toFixed(4);
+
+      const patch = { voltaje, corriente, potencia, energia, estado, update: nowISO() };
+      predicted.set(id, { ...c, ...patch });
+
+      if (allowPut) updates.push(apiUpdate(id, patch));
+    }
+
+    const results = updates.length ? await Promise.allSettled(updates) : [];
+    const failed = results.filter(r => r.status === "rejected").length;
+
+    // ✅ UI sin re-GET extra
+    for (const c of circuits) {
+      const id = String(c.id);
+      const view = predicted.get(id) || c;
 
       updateChartAndBadges(view);
-      if (view.active) pushHistory(view);
+
+      if (isActiveValue(view.active)) {
+        pushHistory(view);
+      }
       renderMiniTable(id);
     }
 
-    lastTickEl.textContent = new Date().toLocaleTimeString();
-    hideStatus();
+    lastTickEl.textContent = timeHHMMSS();
+
+    if (failed) showStatus(`Aviso: ${failed} actualización(es) fallaron (límite de MockAPI).`, "warning");
+    else hideStatus();
+
   } catch (e) {
-    console.error("MONITOR ERROR =>", e.message || e);
+    console.error("MONITOR ERROR =>", e);
     showStatus(`Error en monitoreo: ${e.message || e}`, "danger");
     notify("Error", "No se pudo actualizar el monitoreo.");
   } finally {
